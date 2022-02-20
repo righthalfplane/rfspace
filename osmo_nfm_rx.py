@@ -7,7 +7,7 @@
 # GNU Radio Python Flow Graph
 # Title: OSMOSDR NFM RX
 # Description: https://apollo.open-resource.org/mission:log:2012:05:06:rtlsdr-osmosdr-gnuradio-fm-receiver
-# GNU Radio version: 3.8.3.0
+# GNU Radio version: 3.8.5.0
 
 from distutils.version import StrictVersion
 
@@ -77,7 +77,7 @@ class osmo_nfm_rx(gr.top_block, Qt.QWidget):
         ##################################################
         self.s_rate = s_rate = 8000000
         self.gain_0 = gain_0 = 40
-        self.freq = freq = 491000000
+        self.freq = freq = 497000000
         self.RF_Gain = RF_Gain = 24
 
         ##################################################
@@ -167,10 +167,10 @@ class osmo_nfm_rx(gr.top_block, Qt.QWidget):
         self._gain_0_range = Range(0, 200, 1, 40, 200)
         self._gain_0_win = RangeWidget(self._gain_0_range, self.set_gain_0, 'gain_0', "counter_slider", float)
         self.top_layout.addWidget(self._gain_0_win)
-        self.extras_s_tcp_0 = extras.s_tcp('192.168.0.2', 5000)
+        self.extras_s_tcp_1 = extras.s_tcp('192.168.0.3', 5000)
         self.dtv_atsc_rx_0 = dtv.atsc_rx(s_rate,1.1)
-        self.blocks_udp_sink_0 = blocks.udp_sink(gr.sizeof_char*1, '127.0.0.1', 1234, 256, False)
-        self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_cc(40)
+        self.blocks_udp_sink_0_0 = blocks.udp_sink(gr.sizeof_char*1, '192.168.0.3', 1234, 512, False)
+        self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_cc(0.01)
         self.blocks_char_to_float_0 = blocks.char_to_float(1, 1)
 
 
@@ -181,8 +181,8 @@ class osmo_nfm_rx(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_multiply_const_vxx_0_0, 0), (self.dtv_atsc_rx_0, 0))
         self.connect((self.blocks_multiply_const_vxx_0_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.dtv_atsc_rx_0, 0), (self.blocks_char_to_float_0, 0))
-        self.connect((self.dtv_atsc_rx_0, 0), (self.blocks_udp_sink_0, 0))
-        self.connect((self.extras_s_tcp_0, 0), (self.blocks_multiply_const_vxx_0_0, 0))
+        self.connect((self.dtv_atsc_rx_0, 0), (self.blocks_udp_sink_0_0, 0))
+        self.connect((self.extras_s_tcp_1, 0), (self.blocks_multiply_const_vxx_0_0, 0))
 
 
     def closeEvent(self, event):
