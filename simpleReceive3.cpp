@@ -45,7 +45,8 @@ int main(void)
     
     printf("\n");
 
-	SoapySDR::Device *sdr = SoapySDR::Device::make(results[3]);
+	//SoapySDR::Device *sdr = SoapySDR::Device::make(results[3]);
+    SoapySDR::Device *sdr = SoapySDR::Device::make(results[4]);
 
 	if (sdr == NULL)
 	{
@@ -55,14 +56,27 @@ int main(void)
 	
 	sdr->setSampleRate(SOAPY_SDR_RX, 0, 2e6);
 			
-	sdr->setFrequency(SOAPY_SDR_RX, 0, 80.3e6);
+	sdr->setFrequency(SOAPY_SDR_RX, 0, 102.5e6);
+	
+	sdr->setSampleRate(SOAPY_SDR_RX, 1, 2e6);
+			
+	sdr->setFrequency(SOAPY_SDR_RX, 1, 163e6);
 	
 	const std::vector<size_t> channels = {(size_t)0,(size_t)1};
 			
 	//const std::vector<size_t> channels = {(size_t)0};
-
 	
-	SoapySDR::Stream *rxStream = sdr->setupStream(SOAPY_SDR_RX, SOAPY_SDR_CF32, channels);
+	//const std::vector<size_t> channels = {(size_t)1};
+
+	SoapySDR::Stream *rxStream;
+	
+	try {
+		rxStream = sdr->setupStream(SOAPY_SDR_RX, SOAPY_SDR_CF32, channels);
+    } catch(const std::exception &e) {
+        std::string streamExceptionStr = e.what();
+        printf("Error: %s\n",streamExceptionStr.c_str());
+        exit(1);
+    }
 
 	sdr->activateStream(rxStream, 0, 0, 0); 
 
@@ -72,7 +86,14 @@ int main(void)
 	//create a re-usable buffer for rx samples
 	float buff[400000*2];
 	float buff1[400000*2];
+	FILE *out11;
+	FILE *out22;
+	out11=fopen("test1_IQ_163000000_2000000_fc.raw","wb");
+	if(!out11)exit(1);
+	out22=fopen("test2_IQ_163000000_2000000_fc.raw","wb");
+	if(!out22)exit(1);
  
+ 	long long countPrint=0;
 	//receive some samples
 	while (loop)
 	{
@@ -84,18 +105,24 @@ int main(void)
 		int rec=4096;
 		out=buff;
 		out1=buff1;
+		int iget;
 		while(rec > 0 && loop){
 		    buffs[0]=out;
 		    buffs[1]=out1;
 		    flags=0;
 		    timeNs=0;
-			int ret = sdr->readStream(rxStream, buffs, rec, flags, timeNs, 1000000L);
-			printf("ret=%d, flags=%d, timeNs=%lld rec %d\n", ret, flags, timeNs, rec);
+		    iget=254;
+		    iget=rec;
+			int ret = sdr->readStream(rxStream, buffs, iget, flags, timeNs, 1000000L);
+			printf("ret=%d, flags=%d, timeNs=%lld rec %d out %f out1 %f count %lld\n", ret, flags, timeNs, rec,out[0],out1[0],countPrint++);
 			//if(ret < 0)fprintf(stderr,"Read Error\n");
-			out += 2*(long long)ret;
-			out1 += 2*(long long)ret;
-			rec -= ret;
-
+			if(ret > 0){
+			    fwrite(out,8,ret,out11);
+				out += 2*(long long)ret;
+			    fwrite(out1,8,ret,out22);
+				out1 += 2*(long long)ret;
+				rec -= ret;
+			}
 		}
 
 	}
@@ -105,6 +132,9 @@ int main(void)
         sdr->closeStream(rxStream);
     
         SoapySDR::Device::unmake(sdr);
+        
+        if(out11)fclose(out11);
+        if(out22)fclose(out22);
 
 
 	printf("Done\n");
