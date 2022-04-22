@@ -9,4 +9,12 @@ LimeSuiteTV39TS.grc is a gnuradio-companion script to recevive over the air TV.
 
 LimeSuiteTV39TS02.grc is a gnuradio-companion script to recevive over the air TV.
 
+Sue07.geo is a gmsh input file for a cat food cap.
 
+Sue08.geo is a gmsh input file for a cat food cap.
+
+Sue.JPG is a picture of the finish cat food cap.
+
+bridge03.geo is a gmsh input file for a bridge that was used in a finite element calculation.
+
+microphoneFMTX2.cpp is a soapySDR program that transmits FM.
