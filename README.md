@@ -18,3 +18,8 @@ Sue.JPG is a picture of the finish cat food cap.
 bridge03.geo is a gmsh input file for a bridge that was used in a finite element calculation.
 
 microphoneFMTX2.cpp is a soapySDR program that transmits FM.
+
+osmo_nfm_rx.py is a osmo python program to receive narrow band FM.
+
+simpleReceive3.cpp is a soapySDR program that receives both channels using the bladeRF.
+
