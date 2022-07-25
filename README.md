@@ -19,7 +19,7 @@ bridge03.geo is a gmsh input file for a bridge that was used in a finite element
 
 microphoneFMTX2.cpp is a soapySDR program that transmits FM.
 
-odfm_loopback05.grc is odfm transmitter and receiver using gnuradio.
+ofdm_loopback05.grc is odfm transmitter and receiver using gnuradio.
 
 osmo_nfm_rx.py is a osmo python program to receive narrow band FM.
 
