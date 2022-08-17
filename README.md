@@ -21,6 +21,14 @@ microphoneFMTX2.cpp is a soapySDR program that transmits FM.
 
 ofdm_loopback05.grc is an ofdm transmitter and receiver using gnuradio-companion.
 
+ofdm_loopback_blade08Mac.grc is an ofdm receiver for the Macintosh using gnuradio-companion.
+
+ofdm_loopback_blade08Windows.grc is an ofdm transmitter for the Windows using gnuradio-companion.
+
+ofdm_loopback_blade09Mac.grc uses a ofdm receiver to capture a file on the Macintosh using gnuradio-companion.
+
+ofdm_loopback_blade09Windows.grc uses ofdm to send a file on Windows using gnuradio-companion.
+
 osmo_nfm_rx.py is a osmo python program to receive narrow band FM.
 
 simpleReceive3.cpp is a soapySDR program that receives both channels using the bladeRF.
