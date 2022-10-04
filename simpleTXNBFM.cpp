@@ -10,7 +10,7 @@
 
 #include <liquid/liquid.h>
 
-#include <unistd.h>
+#include <signal.h>
 
 #define	BLOCK_SIZE2 200000
 
