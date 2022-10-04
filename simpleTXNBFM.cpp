@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 	long int count=0;
 	int readcount;
 	
-    const double frequency = 85.5e6;  //center frequency to 500 MHz
+    const double frequency = 462.7125e6;  //center frequency to 500 MHz
     const double sample_rate = 2e6;    //sample rate to 5 MHz
     float As = 60.0f;
     
