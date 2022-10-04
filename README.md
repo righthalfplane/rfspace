@@ -33,3 +33,6 @@ osmo_nfm_rx.py is a osmo python program to receive narrow band FM.
 
 simpleReceive3.cpp is a soapySDR program that receives both channels using the bladeRF.
 
+simpleTXNBFM.cpp is a soapySDR program that transmits a WAV file as NBFM.
+
+
