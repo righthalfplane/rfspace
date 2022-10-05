@@ -84,11 +84,11 @@ int main(int argc, char** argv)
     //fprintf(stderr,"txStream %p\n",txStream);
     
     
-    size_t MTU=device->getStreamMTU(txStream);
-    printf("MTU: %ld\n",MTU);
+   // size_t MTU=device->getStreamMTU(txStream);
+   // printf("MTU: %ld\n",MTU);
 
 
-     device->setHardwareTime(0); 
+    // device->setHardwareTime(0); 
 
    
     int ret4=device->activateStream(txStream);
