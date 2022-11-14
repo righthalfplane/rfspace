@@ -19,6 +19,10 @@ bridge03.geo is a gmsh input file for a bridge that was used in a finite element
 
 microphoneFMTX2.cpp is a soapySDR program that transmits FM.
 
+nbfmReceive.cpp is a c++ program that receives Narrow Band FM using SoapySDR.
+
+nbfmSend.cpp is a c++ program that sends Narrow Band FM using SoapySDR.
+
 ofdm_loopback05.grc is an ofdm transmitter and receiver using gnuradio-companion.
 
 ofdm_loopback_blade08Mac.grc is an ofdm receiver for the Macintosh using gnuradio-companion.
