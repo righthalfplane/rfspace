@@ -39,4 +39,7 @@ simpleReceive3.cpp is a soapySDR program that receives both channels using the b
 
 simpleTXNBFM.cpp is a soapySDR program that transmits a WAV file as NBFM.
 
+universalReceive.cpp is a c++ program that receives FM, NBFM, AM, NAM, LSB, USB and CW using SoapySDR.
+
+universalSend.cpp is a c++ program that sends NBFM, AM, NAM, LSB and USB using SoapySDR.
 
