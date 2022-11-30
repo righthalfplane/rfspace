@@ -12,15 +12,18 @@
 
 #include <unistd.h>
 
-#include "Poly.h"
+#include <signal.h>
+
 
 #define	BLOCK_SIZE 2048
 
 
-// c++ -std=c++11 -o simpleTXTwo simpleTXTwo.cpp Poly.cpp Utilities.cpp -lSoapySDR -lsndfile -lliquid -Wall -Wno-return-type-c-linkage -Wno-deprecated-declarations
+// c++ -std=c++11 -o simpleTXTwo simpleTXTwo.cpp -lSoapySDR -lsndfile -lliquid -Wall -Wno-return-type-c-linkage
 // simpleTXTwo "driver=hackrf" "/Users/dir/images/saveVoice.wav" "/Users/dir/images/saveAudio.wav"
 // simpleTXTwo "driver=bladerf" "/Users/dir/images/saveVoice.wav" "/Users/dir/images/saveAudio.wav"
 // simpleTXTwo "driver=bladerf" "/Users/dir/images/saveVoice.wav" "/Users/dir/images/eye.wav"
+// simpleTXTwo "driver=hackrf" "/Users/dir/images/saveVoice.wav" "/Users/dir/images/eye.wav"
+
 
 class Send{
 public:
@@ -38,7 +41,6 @@ public:
 	double samplerate;
 	double offset;
 	double sino,coso,sindt,cosdt,dt;
-	Poly *p;
 
 };
 
@@ -111,12 +113,8 @@ Send::Send(double frequency,double sampleratei,char *filename,double offseti)
 		double w=2.0*pi*(offset);
 		sindt=sin(w*dt);
 		cosdt=cos(w*dt);
- 		
 	}
 	
-    	p=new Poly((float)samplerate);
-        p->Cbandpass("butter",16,1.0,0.5*samplerate+offset-5000,0.5*samplerate+offset+5000);
-        p->forceCascadeStart();
 }
 
 int Send::transScribe(float *buf1,float *buf2,unsigned int *num22)
@@ -132,25 +130,12 @@ int Send::transScribe(float *buf1,float *buf2,unsigned int *num22)
 		msresamp_rrrf_execute(iqSampler, (float *)buf1, readcount, (float *)buf2, &num);	
 
 		ampmodem_modulate_block(demodAM, buf2, num, (liquid_float_complex *)buf1);
-/*
-	    float dmin = 1e33;
-        float dmax =-1e33;
-        for(int i=0;i<num;++i){
-            float v=buf1[i];
-            if(v < dmin)dmin=v;
-            if(v > dmax)dmax=v;
-        }
-        
-      fprintf(stderr,"b dmin %f dmin %f\n",dmin,dmax);
-*/
-
 	
 		msresamp_crcf_execute(iqSampler2, (liquid_float_complex *)buf1, num, (liquid_float_complex *)buf2, &num2);
 		
 		if(offset != 0.0){
 			nco_crcf_mix_block_up(oscillator, (liquid_float_complex *)buf2, (liquid_float_complex *)buf2, num2);
 		    //mix(buf2,buf2,num2);
-		   // p->forceCascadeRun(buf2,buf2,num2,0);
 		}
 
 		*num22=num2;
@@ -162,8 +147,6 @@ int Send::transScribe(float *buf1,float *buf2,unsigned int *num22)
 }
 Send::~Send()
 {
-
-
     if(iqSampler)msresamp_rrrf_destroy(iqSampler);
     
     if(iqSampler2)msresamp_crcf_destroy(iqSampler2);
@@ -173,7 +156,6 @@ Send::~Send()
     if(oscillator)nco_crcf_destroy(oscillator);
 
 	sf_close (infile) ;
-	printf("~Send\n");
 }
 
 int Sleep2(int ms);
@@ -184,10 +166,6 @@ void sigIntHandler(const int)
     loop = 0;
 }
 
-int error()
-{
-    exit(-1);
-}
 
 int main(int argc, char** argv)
 {
@@ -195,8 +173,8 @@ int main(int argc, char** argv)
 	long int count=0;
 	
     const double frequency = 205.5e6;
-    const double sample_rate = 2e6;
-    	
+    const double sample_rate = 2.0e6;
+        	
     std::string argStr(argv[1]);
     
     SoapySDR::Device *device = SoapySDR::Device::make(argStr);
@@ -206,14 +184,14 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-   device->setSampleRate(SOAPY_SDR_TX, 0, sample_rate);
+   	device->setSampleRate(SOAPY_SDR_TX, 0, sample_rate);
     
-    printf("Sample rate: %g MHZ\n",sample_rate/1e6);
+	printf("Sample rate: %g MHZ\n",sample_rate/1e6);
 
      device->setFrequency(SOAPY_SDR_TX, 0, "RF", frequency);
     
-     device->setGain(SOAPY_SDR_TX, 0, 30.0);
-     
+     device->setGain(SOAPY_SDR_TX, 0, 50.0);
+          
     std::vector<size_t> channels;
 
 	channels = {0};
@@ -229,7 +207,7 @@ int main(int argc, char** argv)
 	
 	Send *s1 = new Send(frequency,sample_rate,argv[2],0.0);
 	
-	Send *s2 = new Send(frequency,sample_rate,argv[3],100000);
+	Send *s2 = new Send(frequency,sample_rate,argv[3],-100000);
 		
     signal(SIGINT, sigIntHandler);
         		
@@ -266,7 +244,7 @@ int main(int argc, char** argv)
 				double amaxs=-1e33;
 				for(unsigned int n=0;n<num2*2;++n)
 				{
-					double v=fabs(buf2[n])+fabs(buf3[n]);
+					double v=fabs(buf2[n]+buf3[n]);
 					if(v > amaxs)amaxs=v;
 				}
 			
@@ -278,8 +256,10 @@ int main(int argc, char** argv)
 
 				for(unsigned int n=0;n<num2*2;++n)
 				{
-					buf2[n]=amaxs*(buf2[n]+buf3[n]);
+					 buf2[n]=amaxs*(buf2[n]+buf3[n]);
 				}
+				
+				//forceCascadeRun(p,buf2,buf2,num2,0);
 			}else{
 
 				for(unsigned int n=0;n<num2*2;++n)
