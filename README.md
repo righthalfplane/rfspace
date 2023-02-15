@@ -5,7 +5,7 @@ discover-udp.cpp is a standalone test routine with the new routine.
 
 FMLime04qt.grc is a gnuradio-companion script for a FM receiver using a limeSDR mini
 
-GlutSpeedTest.cpp is a program that tests 5 OpenGL methods to determine which is the fasterst.
+GlutSpeedTests.cpp is a program that tests 5 OpenGL methods to determine which is the fasterst.
 
 LimeSuiteTV39TS.grc is a gnuradio-companion script to recevive over the air TV.
 
