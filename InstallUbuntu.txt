@@ -1,0 +1,60 @@
+﻿
+How to Install SdrGlut on Ubuntu 23.04.
+https://youtu.be/lxZ4seB3ss0
+
+sudo apt install obs-studio -y
+
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install tcsh
+tcsh
+vi .tcshrc
+alias h history
+set path =(. $path)
+tcsh
+vi InstallUbuntu.txt
+chmod +xw InstallUbuntu.txt
+apt list | grep libwx
+sudo apt-get install libwxgtk3.2-dev
+sudo apt-get install libwxgtk-media3.2-dev
+sudo apt-get install build-essential
+sudo apt-get install libglew-dev
+
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install build-essential
+sudo apt-get install libsoapysdr-dev
+sudo apt-get install libopenal-dev
+sudo apt-get install libliquid-dev
+sudo apt-get install freeglut3-dev
+sudo apt-get install libalut-dev
+sudo apt-get install libsndfile1-dev
+sudo apt-get install librtaudio-dev
+sudo apt-get install git
+cd ~/Desktop
+git clone --depth=1 https://github.com/righthalfplane/SdrGlut.git
+cd SdrGlut
+make -f makefileUbunta
+./sdrglut.x
+
+
+This is a copy of some of the instruction from -
+https://github.com/pothosware/homebrew-pothos/wiki
+
+brew tap pothosware/homebrew-pothos
+brew tap dholm/homebrew-sdr
+
+brew install soapyremote
+brew install soapyrtlsdr
+brew install soapyhackrf
+brew install limesuite
+brew install liquid-dsp
+
+cd ~/Desktop
+git clone --depth=1 https://github.com/righthalfplane/SdrGlut.git
+cd SdrGlut
+make -f makefileMACINTOSH
+./sdrglut.x
+
