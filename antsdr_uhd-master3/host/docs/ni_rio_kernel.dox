@@ -1,0 +1,184 @@
+/*! \page page_ni_rio_kernel NI RIO Kernel Modules for X-Series PCIe Connectivity
+
+\tableofcontents
+
+\section linux_rio Linux NI RIO Installation and Usage
+
+\subsection linux_overview Overview
+
+UHD can communicate with USRP X300 / X310 devices using the PCIe transport
+connection. The ni-usrp-rio package in the NI Linux Device Drivers repository
+includes the infrastructure to enable this functionality. This package is only
+intended for UHD PCIe transport support. This does not include NI-USRP API support
+on Linux.
+
+\subsection linux_requirements Requirements
+
+In order to use the PCIe transport connection on the USRP X300 / X310 devices,
+you must install the NI USRP RIO driver stack. These include kernel modules
+which are loaded using DKMS. Kernel headers are required to build these
+modules. Only x86_64/AMD64 kernels are supported.
+
+\subsection linux_installation Installing the Drivers in Linux
+
+The NI Linux Device Driver repository can be found at <a
+href=https://www.ni.com/en-us/support/downloads/drivers/download.ni-linux-device-drivers.html>NI Linux Device Drivers</a>.
+
+Note: This guide was written for the NI Linux Device Drivers 2020 release.
+
+<b>Download the corresponding repository rpm or deb for your platform.</b>
+
+For Fedora 31, download the EL8 repository.
+
+For Ubuntu 18.04, download the Bionic repository.
+
+<b>Install the repository rpm or deb:</b>
+    
+Fedora
+
+    rpm -i {ni drivers repository}.rpm
+
+Ubuntu
+
+    dpkg -i {ni drivers repository}.deb
+
+<b>Update package information:</b>
+
+Fedora
+
+    dnf check-update
+Ubuntu
+
+    apt update
+
+<b>Install kernel-headers:</b>
+
+Fedora
+
+    dnf install kernel-devel
+
+Ubuntu
+
+    apt install linux-headers-$(uname -r)
+
+Note: You must ensure that the kernel header version is the same as the system kernel version.
+You can check the system kernel version by running:
+
+    uname -r
+
+<b>Install ni-usrp-rio:</b>
+
+Fedora
+
+    dnf install ni-usrp-rio
+
+Ubuntu
+
+    apt install ni-usrp-rio
+
+<b>Build kernel modules using DKMS:</b>
+
+    dkms autoinstall
+
+If you run into build errors, ensure the kernel headers are installed for
+your current kernel.
+
+<b>Reboot:</b>
+
+    reboot
+
+<b>Run UHD application:</b>
+
+At this point, the connected PCIe device should be visible from UHD. To verify this run:
+
+    uhd_find_devices
+or
+
+    uhd_usrp_probe
+
+\subsection linux_enabling Enabling and Disabling Usage
+
+The package installers automatically starts the niusrpriorpc service on boot. This service is required to
+communicate with UHD.
+
+To start the service:
+
+    systemctl start niusrpriorpc.service
+
+To stop the service:
+
+    systemctl stop niusrpriorpc.service
+
+To disable the service on boot:
+
+    systemctl disable niusrpriorpc.service
+
+To reenable the service on boot:
+
+    systemctl enable niusrpriorpc.service
+
+\subsection linux_swapping Hot-Plugging and Power-Cycling
+
+The USRP X3x0, NI USRP-294x and NI USRP-295x devices <b>cannot</b> be hot-swapped when connected over PCI Express.
+Unplugging the PCI Express connection or powering the device should be done only after powering off the host computer.
+
+\subsection linux_upgrades Upgrading Kernels
+
+DKMS will automatically rebuild the kernel modules when updating kernels. Ensure that the
+appropriate kernel headers are installed when updating kernel versions.
+
+\subsection linux_uninstalling Uninstalling the Driver in Linux
+
+To uninstall ni-usrp-rio, run the following commands:
+
+Fedora:
+
+    dnf remove ni-usrp-rio
+
+Ubuntu:
+ 
+    apt remove ni-usrp-rio
+    apt autoremove
+
+\section windows_rio Windows NI RIO Installation and Usage
+
+\subsection win_requirements Requirements
+
+The latest NI-USRP installer can be found by visiting
+<a href=http://ni.com/info>ni.com/info</a> and entering the Info Code
+`USRPDRIVER`.  System requirements can be found on the resulting
+web page.
+
+\subsection win_install Installing NI-USRP in Windows
+
+The latest NI-USRP installer can be found by visiting
+<a href=http://ni.com/info>ni.com/info</a> and entering the Info Code
+`USRPDRIVER`.  You will need to create a free NI User Account to download
+the installer.  Follow the installation instructions on the web page to
+download and install the driver.
+
+\subsection win_enabling Enabling and Disabling Usage
+
+Once everything is installed and the system is rebooted, the X300/X310 PCI
+Express device should automatically be detected by the Windows Device Manager.
+The device should be enabled by default.
+
+- To disable the USRPRIO device, navigate to "Device Manager", locate the USRPRIO-X3x0 device, right-click on it and choose "Disable"
+- To enable the USRPRIO device, navigate to "Device Manager", locate the USRPRIO-X3x0 device, right-click on it and choose "Enable".
+
+\subsection win_swapping Hot-plugging and Power-cycling
+
+The USRP X3x0, NI USRP-294x and NI USRP-295x devices <b>cannot</b> be hot-swapped when connected over PCI Express.
+Unplugging the PCI Express connection or powering the device should be done only after disabling the device or
+powering off the host computer.
+
+<b>WARNING:</b> If the device is unplugged without disabling it in device manager, the system could become unstable.
+
+\subsection win_uninstall Uninstalling NI-USRP in Windows
+
+Navigate to the Control Panel and open "Programs". Then select National
+Instruments Software and select NI-USRP and NI-RIO from the list. Click on
+uninstall to remove the drivers from your system.
+
+*/
+// vim:ft=doxygen:
