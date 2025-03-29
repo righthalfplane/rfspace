@@ -14,7 +14,7 @@
 #include <sys/timeb.h>
 #include <fftw3.h>
 
-// c++ -std=c++11 -o fftReceive fftReceive.cpp -lSoapySDR -lliquid -lrtaudio -lfftw3f -Wall -Wno-return-type-c-linkage
+// c++ -std=c++11 -o fftReceive fftReceive.cpp -lSoapySDR -lliquid -lrtaudio -lfftw3f -Wall -Wno-return-type-c-linkage -Wno-deprecated-declarations
 // fftReceive "driver=bladerf" 
 // fftReceive "driver=sdrplay" 
 // fftReceive "driver=hackrf" -fm -f 102.1
@@ -264,8 +264,8 @@ int main(int argc, char** argv)
             }
 
         }
-        catch (RtAudioError &error) {
-            error.printMessage();
+        catch (RtAudioErrorType &error) {
+            fprintf(stderr,"Catch Error\n");
             break;
         }
         
@@ -289,8 +289,8 @@ int main(int argc, char** argv)
 						sampleRate, &bufferFrames, &sound, (void *)rx);
 		dac.startStream();
 	}
-	catch ( RtAudioError& e ) {
-		e.printMessage();
+	catch ( RtAudioErrorType& e ) {
+        fprintf(stderr,"Catch Error\n");
 		exit( 0 );
 	}
     	
@@ -558,8 +558,8 @@ int main(int argc, char** argv)
     	// Stop the stream
     	dac.stopStream();
   	}
-  	catch (RtAudioError& e) {
-    	e.printMessage();
+  	catch (RtAudioErrorType & e) {
+        fprintf(stderr,"Catch Error\n");
   	}
   	
   	if ( dac.isStreamOpen() ) dac.closeStream();
