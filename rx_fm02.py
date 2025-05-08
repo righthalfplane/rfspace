@@ -111,9 +111,9 @@ try:
  
         audio_data = signal.decimate(audio_data, dec)
                 
-        phase_diff = np.diff(np.unwrap(np.angle(audio_data)))
+        audio_data = np.diff(np.unwrap(np.angle(audio_data)))
                          
-        audio_data=phase_diff-np.average(phase_diff)
+        audio_data=audio_data-np.average(audio_data)
         
         audio_data=audio_data/np.max(audio_data)
         
