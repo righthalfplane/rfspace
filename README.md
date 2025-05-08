@@ -50,3 +50,8 @@ universalReceive.cpp is a c++ program that receives FM, NBFM, AM, NAM, LSB, USB 
 universalSend.cpp is a c++ program that sends NBFM, AM, NAM, LSB and USB using SoapySDR.
 
 wxWidgetsSpeedTests.cpp tests the wxWidgets program with 5 OpenGL methods to determine which is the fasterst.
+
+rx_am02.py is a simple AM receiver written in python
+
+rx_fm02.py is a simple FM receiver written in python
+
